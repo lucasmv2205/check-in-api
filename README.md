@@ -18,8 +18,8 @@ Gym check-in app.
 ## Business Rules (BRs)
 
 - [x] Users should not be able to register with a duplicate email;
-- [ ] Users should not be able to make two check-ins on the same day;
-- [ ] Users should not be able to check-in if they are not within 100 meters of the gym;
+- [x] Users should not be able to make two check-ins on the same day;
+- [x] Users should not be able to check-in if they are not within 100 meters of the gym;
 - [ ] Check-ins can only be validated within 20 minutes of being created;
 - [ ] Check-ins can only be validated by administrators;
 - [ ] Gyms can only be registered by administrators;
