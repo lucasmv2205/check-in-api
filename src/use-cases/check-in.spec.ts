@@ -2,27 +2,27 @@ import { it, describe, expect, beforeEach, vi, afterEach } from 'vitest'
 import { CheckInUseCase } from './check-in'
 import { InMemoryCheckInsRepository } from '@/repositories/in-memory/in-memory-check-ins-repository'
 import { InMemoryGymsRepository } from '@/repositories/in-memory/in-memory-gyms-repository'
-import { Decimal } from '@prisma/client/runtime/library'
+import { MaxDistanceError } from './errors/max-distance-error'
+import { MaxNumberOfCheckInsError } from './errors/max-number-of-check-ins-error'
 
 let checkInsRepository: InMemoryCheckInsRepository
 let gymsRepository: InMemoryGymsRepository
 let sut: CheckInUseCase
 
 describe('Authenticate use case', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     checkInsRepository = new InMemoryCheckInsRepository()
     gymsRepository = new InMemoryGymsRepository()
     sut = new CheckInUseCase(checkInsRepository, gymsRepository) // sut -> system under test
 
-    const gym = {
+    await gymsRepository.create({
       id: 'gym-id',
-      title: 'Gym Name',
-      description: 'Gym Description',
+      title: 'Gym 1',
+      latitude: 0,
+      longitude: 0,
+      description: 'Description',
       phone: '123456789',
-      latitude: new Decimal(0),
-      longitude: new Decimal(0),
-    }
-    gymsRepository.items.push(gym)
+    })
 
     vi.useFakeTimers()
   })
@@ -59,7 +59,7 @@ describe('Authenticate use case', () => {
         userLatitude: 0,
         userLongitude: 0,
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(MaxNumberOfCheckInsError)
   })
 
   it('should not be able to check in twice in different days', async () => {
@@ -87,13 +87,13 @@ describe('Authenticate use case', () => {
   })
 
   it('should be able to not check in on a distant gym', async () => {
-    gymsRepository.items.push({
+    await gymsRepository.create({
       id: 'distant-gym-id',
       title: 'Distant Gym',
+      latitude: -18.9025114,
+      longitude: -48.2041598,
       description: 'Distant Gym Description',
       phone: '123456789',
-      latitude: new Decimal(-18.9025114),
-      longitude: new Decimal(-48.2041598),
     })
 
     await expect(async () => {
@@ -103,6 +103,6 @@ describe('Authenticate use case', () => {
         userLatitude: -18.9221205,
         userLongitude: -48.2493067,
       })
-    }).rejects.toBeInstanceOf(Error)
+    }).rejects.toBeInstanceOf(MaxDistanceError)
   })
 })
