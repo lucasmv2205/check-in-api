@@ -7,10 +7,10 @@ Gym check-in app.
 - [x] Users should be able to register;
 - [x] Users should be able to authenticate;
 - [x] Users should be able to retrieve their logged-in profile;
-- [ ] Users should be able to get the number of check-ins they have made;
+- [x] Users should be able to get the number of check-ins they have made;
 - [x] Users should be able to access their check-in history;
 - [ ] Users should be able to search for nearby gyms;
-- [ ] Users should be able to search for gyms by name;
+- [x] Users should be able to search for gyms by name;
 - [x] Users should be able to check-in at a gym;
 - [ ] Users should be able to validate their check-in;
 - [x] It should be possible to register a gym;
