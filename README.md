@@ -12,7 +12,7 @@ Gym check-in app.
 - [x] Users should be able to search for nearby gyms (10Km);
 - [x] Users should be able to search for gyms by name;
 - [x] Users should be able to check-in at a gym;
-- [ ] Users should be able to validate their check-in;
+- [x] Users should be able to validate their check-in;
 - [x] It should be possible to register a gym;
 
 ## Business Rules (BRs)
@@ -20,7 +20,7 @@ Gym check-in app.
 - [x] Users should not be able to register with a duplicate email;
 - [x] Users should not be able to make two check-ins on the same day;
 - [x] Users should not be able to check-in if they are not within 100 meters of the gym;
-- [ ] Check-ins can only be validated within 20 minutes of being created;
+- [x] Check-ins can only be validated within 20 minutes of being created;
 - [ ] Check-ins can only be validated by administrators;
 - [ ] Gyms can only be registered by administrators;
 

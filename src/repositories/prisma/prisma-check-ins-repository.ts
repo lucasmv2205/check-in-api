@@ -1,27 +1,62 @@
 import { prisma } from '../../lib/prisma'
-import { Prisma } from '@prisma/client'
+import { CheckIn, Prisma } from '@prisma/client'
 import { CheckInsRepository } from '../check-ins-repository'
+import dayjs from 'dayjs'
 
 export class PrismaCheckInsRepository implements CheckInsRepository {
-  async create(data: Prisma.CheckInUncheckedCreateInput) {
-    const checkIn = await prisma.checkIn.create({
-      data,
+  async findById(id: string) {
+    return await prisma.checkIn.findUnique({
+      where: {
+        id,
+      },
     })
-
-    return checkIn
   }
 
   async findByUserIdOnDate(userId: string, date: Date) {
-    const checkIn = await prisma.checkIn.findFirst({
+    const startOfTheDay = dayjs(date).startOf('date')
+    const endOfTheDay = dayjs(date).endOf('date')
+
+    return await prisma.checkIn.findFirst({
       where: {
         user_id: userId,
         created_at: {
-          gte: new Date(date.toDateString()),
-          lt: new Date(date.toDateString() + ' 23:59:59'),
+          gte: startOfTheDay.toDate(),
+          lte: endOfTheDay.toDate(),
         },
       },
     })
+  }
 
-    return checkIn
+  async findManyByUserId(userId: string, page: number) {
+    return await prisma.checkIn.findMany({
+      where: {
+        user_id: userId,
+      },
+      skip: (page - 1) * 20,
+      take: 20,
+    })
+  }
+
+  async countByUserId(userId: string) {
+    return await prisma.checkIn.count({
+      where: {
+        user_id: userId,
+      },
+    })
+  }
+
+  async create(data: Prisma.CheckInUncheckedCreateInput) {
+    return await prisma.checkIn.create({
+      data,
+    })
+  }
+
+  async save(data: CheckIn) {
+    return await prisma.checkIn.update({
+      where: {
+        id: data.id,
+      },
+      data,
+    })
   }
 }
