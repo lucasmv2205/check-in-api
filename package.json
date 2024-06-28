@@ -4,13 +4,18 @@
   "description": "Gym check-in app.",
   "main": "index.js",
   "scripts": {
-    "start:dev": "tsx watch src/server.ts",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui",
     "start": "node build/server.js",
-    "build": "tsup src --out-dir build"
+    "start:dev": "tsx watch src/server.ts",
+    "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
+    "test:install-prisma-environment": "npm link vitest-environment-prisma",
+    "build": "tsup src --out-dir build",
+    "test": "vitest run --dir src/use-cases",
+    "test:watch": "vitest --dir src/use-cases",
+    "test:e2e": "vitest run --dir src/http",
+    "test:e2e:watch": "vitest --dir src/http",
+    "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
   },
   "keywords": [],
   "author": "",
@@ -19,15 +24,20 @@
     "@rocketseat/eslint-config": "2.2.2",
     "@types/bcryptjs": "2.4.6",
     "@types/node": "20.14.2",
-    "@vitest/coverage-v8": "1.6.0",
-    "@vitest/ui": "1.6.0",
+    "@types/supertest": "6.0.2",
+    "@vitest/coverage-c8": "0.28.5",
+    "@vitest/ui": "0.28.5",
     "eslint": "8.57.0",
+    "npm-run-all": "4.1.5",
     "prisma": "5.15.0",
+    "supertest": "7.0.0",
     "tsup": "8.1.0",
     "tsx": "4.14.1",
-    "typescript": "5.4.5"
+    "typescript": "5.4.5",
+    "vitest": "0.28.5"
   },
   "dependencies": {
+    "@fastify/jwt": "8.0.1",
     "@prisma/client": "5.15.0",
     "bcryptjs": "2.4.3",
     "D": "1.0.0",
@@ -35,7 +45,6 @@
     "dotenv": "16.4.5",
     "fastify": "4.27.0",
     "vite-tsconfig-paths": "4.3.2",
-    "vitest": "1.6.0",
     "zod": "3.23.8"
   }
 }
