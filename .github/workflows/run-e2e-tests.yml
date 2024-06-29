@@ -29,5 +29,5 @@ jobs:
 
       - run: npm run test:e2e
         env:
-          JWT_SECRET: testing
+          JWT_SECRET: testing_secret
           DATABASE_URL: "postgresql://pgdocker:pgdocker@localhost:5432/check_in_app?schema=public"
