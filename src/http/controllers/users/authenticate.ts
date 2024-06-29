@@ -26,13 +26,31 @@ export async function authenticate(req: FastifyRequest, reply: FastifyReply) {
       },
     )
 
-    reply.status(200).send({
-      user: {
-        id: user.id,
-        email: user.email,
+    const refreshToken = await reply.jwtSign(
+      {},
+      {
+        sign: {
+          sub: user.id,
+          expiresIn: '7d',
+        },
       },
-      token,
-    })
+    )
+
+    return reply
+      .setCookie('refreshToken', refreshToken, {
+        path: '/',
+        secure: true,
+        sameSite: true,
+        httpOnly: true,
+      })
+      .status(200)
+      .send({
+        token,
+        user: {
+          id: user.id,
+          email: user.email,
+        },
+      })
   } catch (error) {
     if (error instanceof InvalidCredentialsError) {
       return reply.status(400).send({ message: error.message })
